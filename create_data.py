@@ -100,7 +100,7 @@ def main():
         mapping_file = args.mapping_file
         out_file = args.out_file
 
-        # Create and save the data
+        # Create and save the data:
         logger.info("Creating data...")
         df = create_data(mapping_file, ukb_folder)
 

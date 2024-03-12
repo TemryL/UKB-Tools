@@ -76,7 +76,7 @@ def main():
         logger.error(f"An error occurred while reading the file: {e}")
         sys.exit()
     
-    # Retrieve baskets for the specified UKB project ID for each provided field
+    # Retrieve baskets for the specified UKB project ID for each provided field:
     logger.info("Retrieving baskets.")
     baskets = get_baskets(ukb_folder, project_id, field_list)
 
