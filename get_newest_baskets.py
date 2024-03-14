@@ -92,7 +92,7 @@ def main():
     logger.info("Saving the baskets in JSON file.")
     try:
         with open(out_file, "w") as f:
-            json.dump(baskets, f)
+            json.dump(baskets, f, indent=4, sort_keys=False)
     except FileNotFoundError:
         logger.error(f"Failed to open file: {out_file}. File not found.")
         sys.exit()
