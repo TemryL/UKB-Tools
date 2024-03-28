@@ -2,7 +2,7 @@
 
 * [Introduction](#intro)
 * [Installation](#installation)
-* [Typical Usage](#usage)
+* [Usage](#usage)
 * [Contribute](#contribute)
 
 # Introduction
@@ -35,7 +35,7 @@ Create a virtual environment with Python 3.10 installed. Then install the depend
 pip install -r requirements.txt
 ```
 
-# Typical Usage
+# Usage
 
 
 # Contribute
