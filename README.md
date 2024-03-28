@@ -30,7 +30,7 @@ Move to the directory:
 cd UKB-Tools
 ```
 
-Create a virtual environment with Python 3.10 installed. Then install the dependencies:
+Create a virtual environment with Python 3.11 installed. Then install the dependencies:
 ```
 pip install -r requirements.txt
 ```
