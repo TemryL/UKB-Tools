@@ -148,7 +148,3 @@ def generate_ukb_column(field_id, instance_id, array_id):
 
 def filter_cols(cols, field_list):
     return [col for col in cols if col.split("-")[0] in field_list]
-
-
-def check_icd_code(value, code_list):
-    return any(value.startswith(prefix) for prefix in code_list)
