@@ -11,8 +11,13 @@ This repository provides tools in Python to quickly start using the UK-BioBank d
 ```
 ├── scripts/
     ├── create_data.py
+    ├── create_eu_set.py
     ├── get_newest_baskets.py
-├── src/
+├── ukb_tools/
+    ├── preprocess
+        ├── filtering.py
+        ├── labeling.py
+        ├── utils.py
     ├── __init__.py
     ├── data.py
     ├── logger.py
