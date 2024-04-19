@@ -2,10 +2,9 @@ import pandas as pd
 from .tools import split_ukb_column, filter_cols
 
 
-class UKBData:
-    def __init__(self, data_path, ukb_dict_path):
+class UKB:
+    def __init__(self, data_path):
         self.path = data_path
-        self.ukb_dict_path = ukb_dict_path
         self.data = None
     
     def load_data(self, nrows=None, instance=None):

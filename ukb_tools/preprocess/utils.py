@@ -1,5 +1,11 @@
+import sys
+import numpy as np
 import pandas as pd
+from tqdm import tqdm
 from ..tools import filter_cols
+from ..logger import logger
+from scipy.spatial.distance import cdist, pdist, squareform
+
 
 def rename_features(ukb_data: pd.DataFrame, features: dict) -> (pd.DataFrame, list):
     """
@@ -33,3 +39,48 @@ def rename_features(ukb_data: pd.DataFrame, features: dict) -> (pd.DataFrame, li
             feature_names.append(feat)
 
     return ukb_data, feature_names
+
+def compute_medoid(X):
+    # Drop NaN and convert to numpy
+    X = X.dropna().copy()
+    X = X.to_numpy()
+    
+    logger.info("Computing medoid...")
+    try:
+        # Calculate the pairwise Euclidean distance matrix:
+        distance_matrix = squareform(pdist(X, metric="euclidean"))
+        
+        # Compute the sum of distances from each point to all others:
+        sum_of_distances = np.sum(distance_matrix, axis=1)
+        
+        # Identify the index of the medoid:
+        medoid_index = np.argmin(sum_of_distances)
+        logger.info("Computed medoid successfully.")
+        return X[medoid_index, :]
+    except Exception as e:
+        logger.error(f"Error computing medoid: {e}")
+        sys.exit()
+
+def compute_medoid_mem_efficient(X):
+    # Drop NaN and convert to numpy
+    X = X.dropna().copy()
+    X = X.to_numpy()
+    
+    logger.info("Computing medoid...")
+    try:
+        n_samples = X.shape[0]
+        medoid_index = -1
+        min_sum_distance = np.inf
+        
+        for i in tqdm(range(n_samples)):
+            distances = cdist(X[i:i+1], X, metric="euclidean").flatten()
+            sum_distance = np.sum(distances)
+            if sum_distance < min_sum_distance:
+                min_sum_distance = sum_distance
+                medoid_index = i
+                
+        logger.info("Computed medoid successfully.")
+        return X[medoid_index, :]
+    except Exception as e:
+        logger.error(f"Error computing medoid: {e}")
+        sys.exit()
