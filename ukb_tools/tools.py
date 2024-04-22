@@ -37,7 +37,7 @@ def get_baskets(ukb_folder, project_id, field_list):
             except Exception as e:
                 logger.error(f"An error occurred while processing basket {basket}: {e}")
                 sys.exit()
-                
+
     return basket_dict
 
 
@@ -80,7 +80,9 @@ def get_column_names(csv_file):
             first_row = next(reader)
         return first_row
     except Exception as e:
-        logger.error(f"An error occurred while reading column names from {csv_file}: {e}")
+        logger.error(
+            f"An error occurred while reading column names from {csv_file}: {e}"
+        )
         sys.exit()
 
 
@@ -88,7 +90,7 @@ def get_data(main_ukb_path, field_list, nrows=None):
     try:
         cols = get_column_names(main_ukb_path)
         cols = filter_cols(cols, field_list)
-        df = pd.read_csv(main_ukb_path, usecols=cols, nrows=nrows, encoding='latin1')
+        df = pd.read_csv(main_ukb_path, usecols=cols, nrows=nrows, encoding="latin1")
         return df
     except Exception as e:
         logger.error(f"An error occurred while getting data from {main_ukb_path}: {e}")
@@ -96,21 +98,21 @@ def get_data(main_ukb_path, field_list, nrows=None):
 
 
 def get_dtypes(ukb_dict_path, columns):
-    ukb_dict = pd.read_csv(ukb_dict_path, sep='\t', dtype=str)
+    ukb_dict = pd.read_csv(ukb_dict_path, sep="\t", dtype=str)
     dtypes = {}
-    
+
     for col in columns:
-        if col == 'eid':
+        if col == "eid":
             dtypes[col] = int
             continue
-        
+
         field_id, instance_id, array_id = split_ukb_column(col)
         value_type = ukb_dict[ukb_dict.FieldID == field_id].ValueType.iloc[0]
-        
-        if value_type == 'Integer':
+
+        if value_type == "Integer":
             dtypes[col] = int
-        elif value_type == 'Continuous':
-            dtypes[col] = float 
+        elif value_type == "Continuous":
+            dtypes[col] = float
         else:
             dtypes[col] = str
     return dtypes
@@ -127,15 +129,19 @@ def split_ukb_path(ukb_path):
 
 def split_ukb_column(column):
     try:
-        if ('-' not in column):
-            logger.error(f"Invalid format for column: {column}. Missing '-' to separate field_id and instance_id/array_id.")
+        if "-" not in column:
+            logger.error(
+                f"Invalid format for column: {column}. Missing '-' to separate field_id and instance_id/array_id."
+            )
             return None, None, None
-        if ('.' not in column):
-            logger.error(f"Invalid format for column: {column}. Missing '.' to separate instance_id and array_id.")
+        if "." not in column:
+            logger.error(
+                f"Invalid format for column: {column}. Missing '.' to separate instance_id and array_id."
+            )
             return None, None, None
-        
-        field_id, col = column.split('-')
-        instance_id, array_id = col.split('.')
+
+        field_id, col = column.split("-")
+        instance_id, array_id = col.split(".")
         return field_id, instance_id, array_id
     except ValueError as e:
         logger.error(f"Error splitting column: {column}. Error: {e}")
@@ -143,7 +149,7 @@ def split_ukb_column(column):
 
 
 def generate_ukb_column(field_id, instance_id, array_id):
-    return f'{field_id}-{instance_id}.{array_id}'
+    return f"{field_id}-{instance_id}.{array_id}"
 
 
 def filter_cols(cols, field_list):

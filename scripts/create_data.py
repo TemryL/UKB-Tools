@@ -1,5 +1,6 @@
 # Script to create the data based on the field-to-basket mapping produced by get_newest_baskets.py
 import sys
+
 sys.path.append(".")
 sys.path.append("..")
 

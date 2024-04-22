@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append(".")
 sys.path.append("..")
 
@@ -34,13 +35,15 @@ def main():
         eid = "eid"
         ethnicity_field = "21000"
         genetic_PC_field = "22009"
-        ukb_data = get_data(raw_data, field_list=[eid, ethnicity_field, genetic_PC_field])
+        ukb_data = get_data(
+            raw_data, field_list=[eid, ethnicity_field, genetic_PC_field]
+        )
         logger.info(f"Loaded UKB raw data from {raw_data}.")
         ukb_data = ukb_data[[col for col in ukb_data.columns if "Unnamed" not in col]]
-        
+
         # Create european set:
         eids = filter_european_set(ukb_data)
-        
+
         # Save eids:
         logger.info("Saving European set eids...")
         with open(out_file, "w") as f:

@@ -3,7 +3,10 @@ from datetime import datetime
 import pandas as pd
 from ..tools import filter_cols, split_ukb_column, generate_ukb_column
 
-def match_phenotype(row: pd.Series, phenotype_rules: List[Tuple[str, Callable[[str], bool]]]) -> bool:
+
+def match_phenotype(
+    row: pd.Series, phenotype_rules: List[Tuple[str, Callable[[str], bool]]]
+) -> bool:
     """
     Evaluate a row from a DataFrame against a set of phenotype rules to determine if any condition is met.
 
@@ -18,7 +21,7 @@ def match_phenotype(row: pd.Series, phenotype_rules: List[Tuple[str, Callable[[s
     for field_id, condition in phenotype_rules:
         cols = filter_cols(row.index, [field_id])
         for col in cols:
-            if field_id in ['41271', '41270']:  # Specific handling for ICD codes
+            if field_id in ["41271", "41270"]:  # Specific handling for ICD codes
                 val = str(row[col])
             else:
                 val = row[col]
@@ -27,7 +30,10 @@ def match_phenotype(row: pd.Series, phenotype_rules: List[Tuple[str, Callable[[s
                 return True
     return False
 
-def match_phenotype_columns(row: pd.Series, phenotype_rules: List[Tuple[str, Callable[[str], bool]]]) -> List[str]:
+
+def match_phenotype_columns(
+    row: pd.Series, phenotype_rules: List[Tuple[str, Callable[[str], bool]]]
+) -> List[str]:
     """
     Identify and return column names from a row that match any condition specified in the phenotype rules.
 
@@ -43,7 +49,7 @@ def match_phenotype_columns(row: pd.Series, phenotype_rules: List[Tuple[str, Cal
     for field_id, condition in phenotype_rules:
         cols = filter_cols(row.index, [field_id])
         for col in cols:
-            if field_id in ['41271', '41270']:  # Specific handling for ICD codes
+            if field_id in ["41271", "41270"]:  # Specific handling for ICD codes
                 val = str(row[col])
             else:
                 val = row[col]
@@ -52,7 +58,12 @@ def match_phenotype_columns(row: pd.Series, phenotype_rules: List[Tuple[str, Cal
                 matching_columns.append(col)
     return matching_columns
 
-def get_diagnosis_dates(row: pd.Series, phenotype_rules: List[Tuple[str, Callable[[str], bool]]], diagnosis_date_fields: Dict[str, str]) -> List[str]:
+
+def get_diagnosis_dates(
+    row: pd.Series,
+    phenotype_rules: List[Tuple[str, Callable[[str], bool]]],
+    diagnosis_date_fields: Dict[str, str],
+) -> List[str]:
     """
     Extracts and returns the diagnosis dates for all conditions met in the phenotype rules.
 
@@ -71,14 +82,19 @@ def get_diagnosis_dates(row: pd.Series, phenotype_rules: List[Tuple[str, Callabl
         try:
             date_field = diagnosis_date_fields[field_id]
         except KeyError:
-            date_field = '53'  # Default field if not specified
+            date_field = "53"  # Default field if not specified
             array_id = 0
 
         date_col = generate_ukb_column(date_field, instance_id, array_id)
         dates.append(row[date_col])
     return dates
 
-def get_first_diagnosis_date(row: pd.Series, phenotype_rules: List[Tuple[str, Callable[[str], bool]]], diagnosis_date_fields: Dict[str, str]) -> str:
+
+def get_first_diagnosis_date(
+    row: pd.Series,
+    phenotype_rules: List[Tuple[str, Callable[[str], bool]]],
+    diagnosis_date_fields: Dict[str, str],
+) -> str:
     """
     Finds and returns the first (earliest) diagnosis date from a set of matched conditions.
 
@@ -97,4 +113,4 @@ def get_first_diagnosis_date(row: pd.Series, phenotype_rules: List[Tuple[str, Ca
         first_date = min(dates)
         return first_date.strftime("%Y-%m-%d")
     else:
-        return ''
+        return ""

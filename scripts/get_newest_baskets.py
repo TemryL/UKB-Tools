@@ -1,6 +1,7 @@
 # Script to retrieve the most recent basket for a specified UKB project ID for each provided field
 # Save the field-to-basket mapping in JSON
 import sys
+
 sys.path.append(".")
 sys.path.append("..")
 
@@ -38,13 +39,13 @@ def main():
     try:
         with open(args.field_list, "r") as f:
             field_list = f.read().splitlines()
-    except FileNotFoundError:  
+    except FileNotFoundError:
         logger.error(f"The specified file {args.field_list} was not found.")
         sys.exit()
-    except Exception as e:  
+    except Exception as e:
         logger.error(f"An error occurred while reading the file: {e}")
         sys.exit()
-    
+
     # Retrieve baskets for the specified UKB project ID for each provided field:
     logger.info("Retrieving baskets.")
     baskets = get_baskets(ukb_folder, project_id, field_list)
@@ -68,7 +69,7 @@ def main():
     except Exception as e:
         logger.error(f"An error occurred while saving the baskets to JSON file: {e}")
         sys.exit()
-    
+
 
 if __name__ == "__main__":
     main()

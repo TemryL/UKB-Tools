@@ -11,7 +11,9 @@ from ..logger import logger
 from .utils import compute_medoid_mem_efficient
 
 
-def filter_fully_populated_rows(ukb_data: pd.DataFrame, field_ids: list[str]) -> list[int]:
+def filter_fully_populated_rows(
+    ukb_data: pd.DataFrame, field_ids: list[str]
+) -> list[int]:
     # Subset data for columns matching the specified field_ids
     cols = filter_cols(ukb_data.columns, field_ids)
     df = ukb_data[cols]
@@ -19,7 +21,10 @@ def filter_fully_populated_rows(ukb_data: pd.DataFrame, field_ids: list[str]) ->
     eids = df.dropna().index
     return list(eids)
 
-def filter_partially_populated_rows(ukb_data: pd.DataFrame, field_ids: list[str]) -> list[int]:
+
+def filter_partially_populated_rows(
+    ukb_data: pd.DataFrame, field_ids: list[str]
+) -> list[int]:
     # Initialize a list to store boolean Series for each field ID indicating non-NaN rows
     valid_data_flags = []
 
@@ -33,11 +38,12 @@ def filter_partially_populated_rows(ukb_data: pd.DataFrame, field_ids: list[str]
 
     # Combine boolean Series with OR to flag rows valid in any field_id
     valid_rows = reduce(lambda x, y: x | y, valid_data_flags)
-    
+
     # Return eids of valid rows
     return list(ukb_data[valid_rows].index)
 
-def filter_ethnicity(ukb_data: pd.DataFrame, ethnicity_code:int) -> list[int]:
+
+def filter_ethnicity(ukb_data: pd.DataFrame, ethnicity_code: int) -> list[int]:
     logger.info("Filtering ethnicity...")
     try:
         # Keep eid and ethnicity:
@@ -47,11 +53,11 @@ def filter_ethnicity(ukb_data: pd.DataFrame, ethnicity_code:int) -> list[int]:
             logger.error("No ethnicity columns found after filtering.")
             sys.exit()
         df = ukb_data[ethnicity_cols].copy()
-        
+
         # Keep participant that only provided the same ethnicity accross instances, excluding NaN:
         valid_rows = df[ethnicity_cols].nunique(axis=1, dropna=True) == 1
         df = df[valid_rows]
-        
+
         # Merge the ethnicity columns into a single column, avoiding NaNs:
         df[ethnicity_field] = df.apply(
             lambda row: next(
@@ -60,7 +66,7 @@ def filter_ethnicity(ukb_data: pd.DataFrame, ethnicity_code:int) -> list[int]:
             axis=1,
         )
         df[ethnicity_field] = df[ethnicity_field].astype(int)
-        
+
         # Keep self-reported ethnicity_code:
         df = df[df[ethnicity_field] == ethnicity_code]
 
@@ -69,6 +75,7 @@ def filter_ethnicity(ukb_data: pd.DataFrame, ethnicity_code:int) -> list[int]:
     except Exception as e:
         logger.error(f"Error filtering ethnicity: {e}")
         sys.exit()
+
 
 def filter_european_set(ukb_data: pd.DataFrame) -> list[int]:
     try:
@@ -98,7 +105,7 @@ def filter_european_set(ukb_data: pd.DataFrame) -> list[int]:
         distances = np.sqrt(
             ((ukb_data[genetic_PC_cols[:dim]] - medoid) ** 2).sum(axis=1)
         )
-        
+
         # Select all individuals with a British-medoid distance of less than 40:
         eids = list(ukb_data[distances < 40].eid)
         logger.info(
