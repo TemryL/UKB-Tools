@@ -9,7 +9,7 @@
 This repository provides tools in Python to quickly start using the UK-BioBank dataset before UKB RAP. The folder has the following structure:
 
 ```
-├── scripts/
+├── commands/
     ├── create_data.py
     ├── create_eu_set.py
     ├── get_newest_baskets.py
@@ -55,7 +55,7 @@ Let's say we want to create a dataset with UKB fields 31, 131369, 3066. Then one
 
 Run the following command to retrieve, for a given project ID, the most recent basket that contains the given UKB fields: 
 ```bash
-python scripts/get_newest_baskets.py ${/dir/to/ukb_folder} ${project_id} ${data/ukb_fields.txt} ${data/field_to_basket.json}
+python commands/get_newest_baskets.py ${/dir/to/ukb_folder} ${project_id} ${data/ukb_fields.txt} ${data/field_to_basket.json}
 ```
 
 The results will be stored in a JSON file as follow:
@@ -72,7 +72,7 @@ The results will be stored in a JSON file as follow:
 Finally, to merge the data in a single CSV file, run the following command: 
 
 ```bash
-python scripts/create_data.py ${/dir/to/ukb_folder} ${data/field_to_basket.json} ${data.csv}
+python commands/create_data.py ${/dir/to/ukb_folder} ${data/field_to_basket.json} ${data.csv}
 ```
 
 # Contribute
