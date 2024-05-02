@@ -7,8 +7,8 @@ sys.path.append("..")
 
 import json
 import argparse
-from src.logger import logger
-from src.tools import get_baskets
+from ukb_tools.logger import logger
+from ukb_tools.tools import get_baskets
 
 
 def parse_args():

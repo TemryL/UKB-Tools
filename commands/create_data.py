@@ -5,8 +5,8 @@ sys.path.append(".")
 sys.path.append("..")
 
 import argparse
-from src.logger import logger
-from src.tools import create_raw_data
+from ukb_tools.logger import logger
+from ukb_tools.tools import create_raw_data
 
 
 def parse_args():
